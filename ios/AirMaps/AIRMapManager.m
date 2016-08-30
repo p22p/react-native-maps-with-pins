@@ -27,6 +27,8 @@
 
 #import <MapKit/MapKit.h>
 
+#import <GoogleMaps/GoogleMaps.h>
+
 static NSString *const RCTMapViewKey = @"MapView";
 
 
