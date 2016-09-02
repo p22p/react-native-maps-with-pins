@@ -14,6 +14,9 @@ import MapPolyline from './MapPolyline';
 import MapPolygon from './MapPolygon';
 import MapCircle from './MapCircle';
 import MapCallout from './MapCallout';
+import GoogleMapView from './GoogleMapView';
+import GoogleMapMarker from './GoogleMapMarker';
+import GoogleMapCallout from './GoogleMapCallout';
 
 const viewConfig = {
   uiViewClassName: 'AIRMap',
@@ -484,5 +487,9 @@ MapView.Circle = MapCircle;
 MapView.Callout = MapCallout;
 
 MapView.Animated = Animated.createAnimatedComponent(MapView);
+
+MapView.GoogleMapView = GoogleMapView;
+MapView.GoogleMapView.Marker = GoogleMapMarker;
+MapView.GoogleMapView.Callout = GoogleMapCallout;
 
 module.exports = MapView;

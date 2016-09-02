@@ -7,7 +7,6 @@ import {
   ScrollView,
 } from 'react-native';
 
-import MapView from 'react-native-maps';
 import PriceMarker from './PriceMarker';
 
 const { width, height } = Dimensions.get('window');
@@ -25,7 +24,7 @@ class Event extends React.Component {
   }
 
   render() {
-    const { event } = this.props;
+    const { event, MapView } = this.props;
     return (
       <View style={styles.event}>
         <Text style={styles.eventName}>{event.name}</Text>
@@ -77,6 +76,8 @@ class DisplayLatLng extends React.Component {
   }
 
   render() {
+    const { MapView } = this.props;
+
     return (
       <View style={styles.container}>
         <MapView
@@ -93,6 +94,8 @@ class DisplayLatLng extends React.Component {
           onCalloutPress={this.recordEvent('Map::onCalloutPress')}
         >
           <MapView.Marker
+            title="This is a title"
+            description="This is a description"
             coordinate={this.state.region}
             onPress={this.recordEvent('Marker::onPress')}
             onSelect={this.recordEvent('Marker::onSelect')}
@@ -121,6 +124,9 @@ class DisplayLatLng extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  callout: {
+    width: 60,
+  },
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',

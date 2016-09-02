@@ -1,0 +1,39 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+platform :ios, '8.0'
+use_frameworks!
+
+target 'AirMapsExplorer' do
+	pod 'React', path: '../node_modules/react-native', :subspecs => [
+    	'Core',
+    	'RCTActionSheet',
+    	'RCTGeolocation',
+    	'RCTImage',
+    	'RCTLinkingIOS',
+    	'RCTNetwork',
+    	'RCTSettings',
+    	'RCTText',
+    	'RCTVibration',
+    	'RCTWebSocket'
+  	]
+# when not using frameworks  we can do this instead of including the source files in our project (1/2):
+#	pod 'react-native-maps', path: '../../'
+  pod 'GoogleMaps'
+end
+
+# also necessary when not using frameworks?
+# pre_install do |installer|
+  # copied from https://github.com/CocoaPods/CocoaPods/issues/2926
+  # workaround for https://github.com/CocoaPods/CocoaPods/issues/3289
+  # def installer.verify_no_static_framework_transitive_dependencies; end
+# end
+
+# when not using frameworks (2/2):
+# Crud, this shouldn't be necessary, but https://github.com/CocoaPods/CocoaPods/issues/5429
+# post_install do |installer|
+#   	installer.pods_project.targets.each do |target|
+# 		target.build_configurations.each do |config|
+#       		config.build_settings['CLANG_ENABLE_MODULES'] = 'NO'
+#     	end
+#   	end
+# end

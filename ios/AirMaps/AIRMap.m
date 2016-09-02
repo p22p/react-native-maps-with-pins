@@ -102,6 +102,9 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
         [self addOverlay:(id<MKOverlay>)subview];
     }
     [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
+
+  // TODO
+  if (false) [super insertReactSubview:(UIView*)subview atIndex:atIndex];
 }
 
 - (void)removeReactSubview:(id<RCTComponent>)subview {
@@ -117,9 +120,13 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
         [self removeOverlay:(id <MKOverlay>) subview];
     }
     [_reactSubviews removeObject:(UIView *)subview];
+
+  // TODO
+  if (false) [super removeReactSubview:(UIView*)subview];
 }
 
 - (NSArray<id<RCTComponent>> *)reactSubviews {
+  if (false) [super reactSubviews];
     return _reactSubviews;
 }
 
