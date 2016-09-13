@@ -21,6 +21,14 @@
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChangeComplete;
 @property (nonatomic, strong) NSMutableArray *markers;
 
+@property (nonatomic, assign) BOOL showsBuildings;
+@property (nonatomic, assign) BOOL showsTraffic;
+@property (nonatomic, assign) BOOL showsCompass;
+@property (nonatomic, assign) BOOL scrollEnabled;
+@property (nonatomic, assign) BOOL zoomEnabled;
+@property (nonatomic, assign) BOOL rotateEnabled;
+@property (nonatomic, assign) BOOL pitchEnabled;
+
 - (BOOL)didTapMarker:(GMSMarker *)marker;
 - (void)didChangeCameraPosition:(GMSCameraPosition *)position;
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position;

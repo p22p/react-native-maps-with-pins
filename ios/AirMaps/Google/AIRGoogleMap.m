@@ -13,7 +13,6 @@
 #import "UIView+React.h"
 
 static double mercadorRadius = 85445659.44705395;
-//static double mercadorOffset = 268435456;
 
 id cameraPositionAsJSON(GMSCameraPosition *position) {
   return @{
@@ -124,4 +123,60 @@ id cameraPositionAsJSON(GMSCameraPosition *position) {
   if (self.onRegionChangeComplete) self.onRegionChangeComplete(event);
 }
 
+
+- (void)setScrollEnabled:(BOOL)scrollEnabled {
+  self.settings.scrollGestures = scrollEnabled;
+}
+
+- (BOOL)scrollEnabled {
+  return self.settings.scrollGestures;
+}
+
+- (void)setZoomEnabled:(BOOL)zoomEnabled {
+  self.settings.zoomGestures = zoomEnabled;
+}
+
+- (BOOL)zoomEnabled {
+  return self.settings.zoomGestures;
+}
+
+- (void)setRotateEnabled:(BOOL)rotateEnabled {
+  self.settings.rotateGestures = rotateEnabled;
+}
+
+- (BOOL)rotateEnabled {
+  return self.settings.rotateGestures;
+}
+
+- (void)setPitchEnabled:(BOOL)pitchEnabled {
+  self.settings.tiltGestures = pitchEnabled;
+}
+
+- (BOOL)pitchEnabled {
+  return self.settings.tiltGestures;
+}
+
+- (void)setShowsTraffic:(BOOL)showsTraffic {
+  self.trafficEnabled = showsTraffic;
+}
+
+- (BOOL)showsTraffic {
+  return self.trafficEnabled;
+}
+
+- (void)setShowsBuildings:(BOOL)showsBuildings {
+  self.buildingsEnabled = showsBuildings;
+}
+
+- (BOOL)showsBuildings {
+  return self.buildingsEnabled;
+}
+
+- (void)setShowsCompass:(BOOL)showsCompass {
+  self.settings.compassButton = showsCompass;
+}
+
+- (BOOL)showsCompass {
+  return self.settings.compassButton;
+}
 @end

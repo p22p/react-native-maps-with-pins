@@ -23,6 +23,7 @@ import CachedMap from './examples/CachedMap';
 import LoadingMap from './examples/LoadingMap';
 import TakeSnapshot from './examples/TakeSnapshot';
 import FitToSuppliedMarkers from './examples/FitToSuppliedMarkers';
+import StaticMap from './examples/StaticMap';
 import MapView from 'react-native-maps';
 
 const { GoogleMapView } = MapView;
@@ -100,6 +101,7 @@ class App extends React.Component {
   render() {
     if (this.state.useGoogleMaps) {
       return this.renderExamples([
+        [StaticMap, 'StaticMap'],
         [EventListener, 'Events'],
         [MarkerTypes, 'Image Based Markers'],
         [Callouts, 'Custom Callouts'],
@@ -107,6 +109,7 @@ class App extends React.Component {
     }
 
     return this.renderExamples([
+      [StaticMap, 'StaticMap'],
       [DisplayLatLng, 'Tracking Position'],
       [ViewsAsMarkers, 'Arbitrary Views as Markers'],
       [EventListener, 'Events'],
