@@ -126,7 +126,7 @@ CGRect unionRect(CGRect a, CGRect b) {
                                                                           size:self.bounds.size
                                                                          scale:RCTScreenScale()
                                                                        clipped:YES
-                                                                    resizeMode:UIViewContentModeCenter
+                                                                    resizeMode:RCTResizeModeCenter
                                                                  progressBlock:nil
                                                                completionBlock:^(NSError *error, UIImage *image) {
                                                                  if (error) {
