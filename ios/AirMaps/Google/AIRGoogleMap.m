@@ -12,8 +12,6 @@
 #import "RCTConvert+MapKit.h"
 #import "UIView+React.h"
 
-static double mercadorRadius = 85445659.44705395;
-
 id cameraPositionAsJSON(GMSCameraPosition *position) {
   // todo: convert zoom to delta lat/lng
   return @{
@@ -74,58 +72,33 @@ id cameraPositionAsJSON(GMSCameraPosition *position) {
   _initialRegion = initialRegion;
   _initialRegionSet = true;
 
-  // TODO: move to some utility lib?
-  static double maxGoogleLevels = -1.0;
-  if (maxGoogleLevels < 0.0)
-    maxGoogleLevels = log2(MKMapSizeWorld.width / 256.0);
-  CLLocationDegrees longitudeDelta = initialRegion.span.longitudeDelta;
-  CGFloat mapWidthInPixels = [UIScreen mainScreen].bounds.size.width; // TODO?: self.bounds.size.width;
-  double zoomScale = longitudeDelta * mercadorRadius * M_PI / (180.0 * mapWidthInPixels);
-  double zoomer = maxGoogleLevels - log2( zoomScale );
-  if ( zoomer < 0 ) zoomer = 0;
+  float latitudeDelta = initialRegion.span.latitudeDelta * 0.5;
+  float longitudeDelta = initialRegion.span.longitudeDelta * 0.5;
 
-  GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:initialRegion.center.latitude
-                                                          longitude:initialRegion.center.longitude
-                                                               zoom:zoomer];
-
-  // TODO: why don't this work?
-//  CLLocationCoordinate2D a = CLLocationCoordinate2DMake(initialRegion.center.latitude + initialRegion.span.latitudeDelta,
-//                                                         initialRegion.center.longitude - initialRegion.span.longitudeDelta);
-//  CLLocationCoordinate2D b = CLLocationCoordinate2DMake(initialRegion.center.latitude - initialRegion.span.latitudeDelta,
-//                                                         initialRegion.center.longitude + initialRegion.span.longitudeDelta);
-//  GMSCoordinateBounds *cBounds = [[GMSCoordinateBounds alloc] initWithCoordinate:a coordinate:b];
-//  GMSCameraPosition *c = [self cameraForBounds:cBounds insets:UIEdgeInsetsZero];
+  CLLocationCoordinate2D a = CLLocationCoordinate2DMake(initialRegion.center.latitude + latitudeDelta,
+                                                         initialRegion.center.longitude + longitudeDelta);
+  CLLocationCoordinate2D b = CLLocationCoordinate2DMake(initialRegion.center.latitude - latitudeDelta,
+                                                         initialRegion.center.longitude - longitudeDelta);
+  GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:a coordinate:b];
+  GMSCameraPosition *camera = [self cameraForBounds:bounds insets:UIEdgeInsetsZero];
 
   self.camera = camera;
-
 }
 
 - (void)setRegion:(MKCoordinateRegion)region {
+  // TODO: The JS component is repeatedly setting region unnecessarily. We might want to deal with that in here.
+
   _region = region;
 
-  printf("LTTTTTT: %f\n", region.span.latitudeDelta);
+  float latitudeDelta = region.span.latitudeDelta * 0.5;
+  float longitudeDelta = region.span.longitudeDelta * 0.5;
 
-  // TODO: move to some utility lib?
-  static double maxGoogleLevels = -1.0;
-  if (maxGoogleLevels < 0.0)
-    maxGoogleLevels = log2(MKMapSizeWorld.width / 256.0);
-  CLLocationDegrees longitudeDelta = region.span.longitudeDelta;
-  CGFloat mapWidthInPixels = [UIScreen mainScreen].bounds.size.width; // TODO?: self.bounds.size.width;
-  double zoomScale = longitudeDelta * mercadorRadius * M_PI / (180.0 * mapWidthInPixels);
-  double zoomer = maxGoogleLevels - log2( zoomScale );
-  if ( zoomer < 0 ) zoomer = 0;
-
-  GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:region.center.latitude
-                                                          longitude:region.center.longitude
-                                                               zoom:zoomer];
-
-  // TODO: why don't this work?
-  //  CLLocationCoordinate2D a = CLLocationCoordinate2DMake(initialRegion.center.latitude + initialRegion.span.latitudeDelta,
-  //                                                         initialRegion.center.longitude - initialRegion.span.longitudeDelta);
-  //  CLLocationCoordinate2D b = CLLocationCoordinate2DMake(initialRegion.center.latitude - initialRegion.span.latitudeDelta,
-  //                                                         initialRegion.center.longitude + initialRegion.span.longitudeDelta);
-  //  GMSCoordinateBounds *cBounds = [[GMSCoordinateBounds alloc] initWithCoordinate:a coordinate:b];
-  //  GMSCameraPosition *c = [self cameraForBounds:cBounds insets:UIEdgeInsetsZero];
+  CLLocationCoordinate2D a = CLLocationCoordinate2DMake(region.center.latitude + latitudeDelta,
+                                                        region.center.longitude + longitudeDelta);
+  CLLocationCoordinate2D b = CLLocationCoordinate2DMake(region.center.latitude - latitudeDelta,
+                                                        region.center.longitude - longitudeDelta);
+  GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:a coordinate:b];
+  GMSCameraPosition *camera = [self cameraForBounds:bounds insets:UIEdgeInsetsZero];
 
   self.camera = camera;
 }

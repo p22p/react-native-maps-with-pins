@@ -77,6 +77,7 @@ class DisplayLatLng extends React.Component {
 
   render() {
     const { MapView } = this.props;
+    const { region } = this.state;
 
     return (
       <View style={styles.container}>
@@ -93,6 +94,18 @@ class DisplayLatLng extends React.Component {
           onMarkerDeselect={this.recordEvent('Map::onMarkerDeselect')}
           onCalloutPress={this.recordEvent('Map::onCalloutPress')}
         >
+          <MapView.Marker
+            coordinate={{
+              latitude: LATITUDE + (LATITUDE_DELTA / 2),
+              longitude: LONGITUDE + (LONGITUDE_DELTA / 2),
+            }}
+          />
+          <MapView.Marker
+            coordinate={{
+              latitude: LATITUDE - (LATITUDE_DELTA / 2),
+              longitude: LONGITUDE - (LONGITUDE_DELTA / 2),
+            }}
+          />
           <MapView.Marker
             title="This is a title"
             description="This is a description"
