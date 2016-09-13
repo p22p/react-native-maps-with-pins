@@ -15,6 +15,7 @@
 static double mercadorRadius = 85445659.44705395;
 
 id cameraPositionAsJSON(GMSCameraPosition *position) {
+  // todo: convert zoom to delta lat/lng
   return @{
            @"latitude": [NSNumber numberWithDouble:position.target.latitude],
            @"longitude": [NSNumber numberWithDouble:position.target.longitude],
@@ -25,6 +26,7 @@ id cameraPositionAsJSON(GMSCameraPosition *position) {
 @implementation AIRGoogleMap
 {
   NSMutableArray<UIView *> *_reactSubviews;
+  BOOL _initialRegionSet;
 }
 
 - (instancetype)init
@@ -32,6 +34,7 @@ id cameraPositionAsJSON(GMSCameraPosition *position) {
   if ((self = [super init])) {
     _reactSubviews = [NSMutableArray new];
     _markers = [NSMutableArray array];
+    _initialRegionSet = false;
   }
   return self;
 }
@@ -66,7 +69,10 @@ id cameraPositionAsJSON(GMSCameraPosition *position) {
 #pragma clang diagnostic pop
 
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
+  if (_initialRegionSet) return;
+
   _initialRegion = initialRegion;
+  _initialRegionSet = true;
 
   // TODO: move to some utility lib?
   static double maxGoogleLevels = -1.0;
@@ -94,6 +100,36 @@ id cameraPositionAsJSON(GMSCameraPosition *position) {
 
 }
 
+- (void)setRegion:(MKCoordinateRegion)region {
+  _region = region;
+
+  printf("LTTTTTT: %f\n", region.span.latitudeDelta);
+
+  // TODO: move to some utility lib?
+  static double maxGoogleLevels = -1.0;
+  if (maxGoogleLevels < 0.0)
+    maxGoogleLevels = log2(MKMapSizeWorld.width / 256.0);
+  CLLocationDegrees longitudeDelta = region.span.longitudeDelta;
+  CGFloat mapWidthInPixels = [UIScreen mainScreen].bounds.size.width; // TODO?: self.bounds.size.width;
+  double zoomScale = longitudeDelta * mercadorRadius * M_PI / (180.0 * mapWidthInPixels);
+  double zoomer = maxGoogleLevels - log2( zoomScale );
+  if ( zoomer < 0 ) zoomer = 0;
+
+  GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:region.center.latitude
+                                                          longitude:region.center.longitude
+                                                               zoom:zoomer];
+
+  // TODO: why don't this work?
+  //  CLLocationCoordinate2D a = CLLocationCoordinate2DMake(initialRegion.center.latitude + initialRegion.span.latitudeDelta,
+  //                                                         initialRegion.center.longitude - initialRegion.span.longitudeDelta);
+  //  CLLocationCoordinate2D b = CLLocationCoordinate2DMake(initialRegion.center.latitude - initialRegion.span.latitudeDelta,
+  //                                                         initialRegion.center.longitude + initialRegion.span.longitudeDelta);
+  //  GMSCoordinateBounds *cBounds = [[GMSCoordinateBounds alloc] initWithCoordinate:a coordinate:b];
+  //  GMSCameraPosition *c = [self cameraForBounds:cBounds insets:UIEdgeInsetsZero];
+
+  self.camera = camera;
+}
+
 - (BOOL)didTapMarker:(GMSMarker *)marker {
   AIRGMSMarker *airMarker = (AIRGMSMarker *)marker;
 
@@ -110,17 +146,17 @@ id cameraPositionAsJSON(GMSCameraPosition *position) {
 }
 
 - (void)didChangeCameraPosition:(GMSCameraPosition *)position {
-  id event = @{@"action": @"region-change",
+  id event = @{@"continuous": @YES,
                @"region": cameraPositionAsJSON(position),
                };
-  if (self.onRegionChange) self.onRegionChange(event);
+  if (self.onChange) self.onChange(event);
 }
 
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position {
-  id event = @{@"action": @"region-change-complete",
+  id event = @{@"continuous": @NO,
                @"region": cameraPositionAsJSON(position),
                };
-  if (self.onRegionChangeComplete) self.onRegionChangeComplete(event);
+  if (self.onChange) self.onChange(event);  // complete
 }
 
 

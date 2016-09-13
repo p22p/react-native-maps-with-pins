@@ -16,7 +16,9 @@
 
 // TODO: don't use MK region?
 @property (nonatomic, assign) MKCoordinateRegion initialRegion;
+@property (nonatomic, assign) MKCoordinateRegion region;
 @property (nonatomic, copy) RCTBubblingEventBlock onMarkerPress;
+@property (nonatomic, copy) RCTBubblingEventBlock onChange;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChangeComplete;
 @property (nonatomic, strong) NSMutableArray *markers;

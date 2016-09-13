@@ -102,8 +102,9 @@ class App extends React.Component {
     if (this.state.useGoogleMaps) {
       return this.renderExamples([
         [StaticMap, 'StaticMap'],
+        [DisplayLatLng, 'Tracking Position (incomplete)'],
         [ViewsAsMarkers, 'Arbitrary Views as Markers'],
-        [EventListener, 'Events'],
+        [EventListener, 'Events (incomplete)'],
         [MarkerTypes, 'Image Based Markers'],
         [Callouts, 'Custom Callouts'],
       ]);
